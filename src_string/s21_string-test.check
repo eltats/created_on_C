@@ -1,0 +1,1828 @@
+#include "s21_string.h"
+#include <stdlib.h>
+#include <string.h>
+
+// caquaman
+// start memset tests
+#test s21_memset_test_1_str
+    char str1[5] = "1111";
+    char str2[5] = "1111";
+    ck_assert_str_eq(s21_memset(str1, '0', 2), memset(str2, '0', 2));
+// start strchr tests
+#test s21_strchr_test_1
+    char *str = "Hello World!";
+    char *ptr1 = s21_strchr(str, 'l');
+    char *ptr2 = strchr(str, 'l');
+    ck_assert_int_eq(*ptr1, *ptr2);
+    fail_unless(ptr1 == ptr2);
+#test s21_strchr_test_2
+    char *str = "Hello World!";
+    char *ptr1 = s21_strchr(str, 'o');
+    char *ptr2 = strchr(str, 'o');
+    ck_assert_int_eq(*ptr1, *ptr2);
+    fail_unless(ptr1 == ptr2);
+#test s21_strchr_test_3
+    char *str = "Hello World!";
+    char *ptr1 = s21_strchr(str, 'c');
+    char *ptr2 = strchr(str, 'c');
+    fail_unless(ptr1 == ptr2);
+#test s21_strchr_test_4
+    char *str = "";
+    char *ptr1 = s21_strchr(str, 'c');
+    char *ptr2 = strchr(str, 'c');
+    fail_unless(ptr1 == ptr2);
+#test s21_strchr_test_5
+    char *str = "Hello World!";
+    char *ptr1 = s21_strchr(str, '!');
+    char *ptr2 = strchr(str, '!');
+    fail_unless(ptr1 == ptr2);
+#test s21_strchr_test_6
+    char *str = "Hello World!";
+    char *ptr1 = s21_strchr(str, '\0');
+    char *ptr2 = strchr(str, '\0');
+    ck_assert_int_eq(*ptr1, *ptr2);
+    fail_unless(ptr1 == ptr2);
+// start strcpy tests
+#test s21_strcpy_test_1
+    char *str1 = "Hello World";
+    char *str2 = (char*)malloc(sizeof(str1));
+    char *str3 = (char*)malloc(sizeof(str1));
+    s21_strcpy(str2, str1);
+    strcpy(str3, str1);
+    ck_assert_str_eq(str2, str3);
+    free(str2);
+    free(str3);
+#test s21_strcpy_test_2
+    char *str1 = "Hello";
+    char *str2 = (char*)malloc(sizeof(str1));
+    char *str3 = (char*)malloc(sizeof(str1));
+    s21_strcpy(str2, str1);
+    strcpy(str3, str1);
+    ck_assert_str_eq(str2, str3);
+    free(str2);
+    free(str3);
+#test s21_strcpy_test_3
+    char *str1 = "";
+    char *str2 = (char*)malloc(sizeof(str1));
+    char *str3 = (char*)malloc(sizeof(str1));
+    s21_strcpy(str2, str1);
+    strcpy(str3, str1);
+    ck_assert_str_eq(str2, str3);
+    free(str2);
+    free(str3);
+#test s21_strcpy_test_4
+    char *str1 = "Hello";
+    char str2[6];
+    char str3[6];
+    s21_strcpy(str2, str1);
+    strcpy(str3, str1);
+    ck_assert_str_eq(str2, str3);
+// start strerror tests
+#test s21_strerror_test_1
+    for (int i = -2; i < LAST_NUM_ERR + 2; i++)
+        ck_assert_str_eq(s21_strerror(i), strerror(i));
+// gconn
+// start strncat tests
+#test s21_strncat_test_1
+    char str1[20] = "As cool as ";
+    char str2[20] = "As cool as ";
+    char src[] = "a duck";
+    ck_assert_str_eq(s21_strncat(str1, src, 10), strncat(str2, src, 10));
+#test s21_strncat_test_2
+    char str1[13] = "Cool ";
+    char str2[13] = "Cool ";
+    char src[] = "duck";
+    ck_assert_str_eq(s21_strncat(str1, src, 3), strncat(str2, src, 3));
+#test s21_strncat_test_3
+    char str1[11] = "";
+    char str2[11] = "";
+    char src[] = "I'm a duck";
+    char *res1 = s21_strncat(str1, src, 11);
+    char *res2 = strncat(str2, src, 11);
+    ck_assert_str_eq(res1, res2);
+#test s21_strncat_test_4
+    char str1[] = "Who am i?";
+    char str2[] = "Who am i?";
+    char src[] = "";
+    ck_assert_str_eq(s21_strncat(str1, src, 10), strncat(str2, src, 10));
+#test s21_strncat_test_5
+    char str1[1] = "";
+    char str2[1] = "";
+    char src[1] = "";
+    ck_assert_str_eq(s21_strncat(str1, src, 1), strncat(str2, src, 1));
+// start strcmp tests
+#test s21_strcmp_test_1
+    char *str1 = "Hey";
+    char *str2 = "Hey";
+    ck_assert_int_eq(s21_strcmp(str1, str2), strcmp(str1, str2));
+#test s21_strcmp_test_2
+    char *str1 = "";
+    char *str2 = "Hey";
+    ck_assert_int_eq(s21_strcmp(str1, str2), strcmp(str1, str2));
+#test s21_strcmp_test_3
+    char *str1 = "Hey";
+    char *str2 = "";
+    ck_assert_int_eq(s21_strcmp(str1, str2), strcmp(str1, str2));
+#test s21_strcmp_test_4
+    char *str1 = "Ahoi";
+    char *str2 = "Babe";
+    ck_assert_int_eq(s21_strcmp(str1, str2), strcmp(str1, str2));
+#test s21_strcmp_test_5
+    char *str1 = "Babe";
+    char *str2 = "Ahoi";
+    ck_assert_int_eq(s21_strcmp(str1, str2), strcmp(str1, str2));
+// start strspn tests
+#test s21_strspn_test_1
+    char *str1 = "Hey";
+    char *str2 = "Hey";
+    ck_assert_int_eq(s21_strspn(str1, str2), strspn(str1, str2));
+#test s21_strspn_test_2
+    char *str1 = "";
+    char *str2 = "Hey";
+    ck_assert_int_eq(s21_strspn(str1, str2), strspn(str1, str2));
+#test s21_strspn_test_3
+    char *str1 = "";
+    char *str2 = "Hey";
+    ck_assert_int_eq(s21_strspn(str2, str1), strspn(str2, str1));
+#test s21_strspn_test_4
+    char *str1 = "HeHello friend";
+    char *str2 = "Hello";
+    ck_assert_int_eq(s21_strspn(str1, str2), strspn(str1, str2));
+#test s21_strspn_test_5
+    char *str1 = "Friend";
+    char *str2 = "Hello";
+    ck_assert_int_eq(s21_strspn(str1, str2), strspn(str1, str2));
+// start strstr tests
+#test s21_strstr_test_1
+    char *str1 = "Hey";
+    char *str2 = "Hey";
+    ck_assert_str_eq(s21_strstr(str1, str2), strstr(str1, str2));
+#test s21_strstr_test_2
+    char *str1 = "Hey Hey";
+    char *str2 = "";
+    ck_assert_str_eq(s21_strstr(str1, str2), strstr(str1, str2));
+#test s21_strstr_test_3
+    char *str1 = "";
+    char *str2 = "Hey";
+    fail_unless(s21_strstr(str1, str2) == strstr(str1, str2));
+#test s21_strstr_test_4
+    char *str1 = "Hello friend";
+    char *str2 = "Hey";
+    fail_unless(s21_strstr(str1, str2) == strstr(str1, str2));
+// start strtok tests
+#test s21_strtok_test_1
+    char str1[] = "Hey";
+    char str2[] = "Hey";
+    char denim[] = " ";
+    ck_assert_str_eq(s21_strtok(str1, denim), strtok(str2, denim));
+#test s21_strtok_test_2
+    char str1[] = "Hey Hey";
+    char str2[] = "Hey Hey";
+    char denim[] = " ";
+    ck_assert_str_eq(s21_strtok(str1, denim), strtok(str2, denim));
+#test s21_strtok_test_3
+    char str1[] = "Hey, Hey";
+    char str2[] = "Hey, Hey";
+    char denim[] = " ,";
+    ck_assert_str_eq(s21_strtok(str1, denim), strtok(str2, denim));
+#test s21_strtok_test_4
+    char str1[] = "Hey, Hey";
+    char str2[] = "Hey, Hey";
+    char denim[] = " ,";
+    ck_assert_str_eq(s21_strtok(str1, denim), strtok(str2, denim));
+    ck_assert_str_eq(s21_strtok(S21_NULL, denim), strtok(S21_NULL, denim));
+#test s21_strtok_test_5
+    char str1[] = "";
+    char str2[] = "";
+    char denim[] = " ,";
+    fail_unless(s21_strtok(str1, denim) == strtok(str2, denim));
+#test s21_strtok_test_6
+    char str1[] = "Hey Hey";
+    char str2[] = "Hey Hey";
+    char denim[] = "";
+    ck_assert_str_eq(s21_strtok(str1, denim), strtok(str2, denim));
+// sperses
+// start memchr tests
+#test s21_memchr_test_1_str
+    char *str1 = "Hello World";
+    char *ptr1 = s21_memchr(str1, 'l', 12);
+    char *ptr2 = memchr(str1, 'l', 12);
+    ck_assert_int_eq(*ptr1, *ptr2);
+    fail_unless(ptr1 == ptr2);
+#test s21_memchr_test_2_str
+    char *str1 = "Hello World";
+    char *ptr1 = s21_memchr(str1, 'c', 12);
+    char *ptr2 = memchr(str1, 'c', 12);
+    fail_unless(ptr1 == ptr2);
+#test s21_memchr_test_3_str
+    char *str1 = "Hello World";
+    char *ptr1 = s21_memchr(str1, 'd', 12);
+    char *ptr2 = memchr(str1, 'd', 12);
+    ck_assert_int_eq(*ptr1, *ptr2);
+    fail_unless(ptr1 == ptr2);
+#test s21_memchr_test_4_str
+    char *str1 = "Hello World";
+    char *ptr1 = s21_memchr(str1, '\0', 12);
+    char *ptr2 = memchr(str1, '\0', 12);
+    ck_assert_int_eq(*ptr1, *ptr2);
+    fail_unless(ptr1 == ptr2);
+#test s21_memchr_test_5_str
+    char *str1 = "";
+    char *ptr1 = s21_memchr(str1, 'c', 12);
+    char *ptr2 = memchr(str1, 'c', 12);
+    fail_unless(ptr1 == ptr2);
+#test s21_memchr_test_6_str
+    char *str1 = "Hello World";
+    char *ptr1 = s21_memchr(str1, 'H', 12);
+    char *ptr2 = memchr(str1, 'H', 12);
+    ck_assert_int_eq(*ptr1, *ptr2);
+    fail_unless(ptr1 == ptr2);
+// start memcmp tests
+#test s21_memcmp_test_1_str
+    char *str1 = "Hello World";
+    char *str2 = "Hello World";
+    ck_assert_int_eq(s21_memcmp(str1, str2, 12), memcmp(str1, str2, 12));
+#test s21_memcmp_test_2_str
+    char *str1 = "Hello World";
+    char *str2 = "Hello Worl";
+    ck_assert_int_eq(s21_memcmp(str1, str2, 12), memcmp(str1, str2, 12));
+#test s21_memcmp_test_3_str
+    char *str1 = "Hello Worl";
+    char *str2 = "Hello World";
+    ck_assert_int_eq(s21_memcmp(str1, str2, 12), memcmp(str1, str2, 12));
+#test s21_memcmp_test_4_str
+    char *str1 = "";
+    char *str2 = "";
+    ck_assert_int_eq(s21_memcmp(str1, str2, 12), memcmp(str1, str2, 12));
+#test s21_memcmp_test_5_str
+    char *str1 = "Hello World";
+    char *str2 = "";
+    ck_assert_int_eq(s21_memcmp(str1, str2, 12), memcmp(str1, str2, 12));
+#test s21_memcmp_test_6_str
+    char *str1 = "";
+    char *str2 = "Hello World";
+    ck_assert_int_eq(s21_memcmp(str1, str2, 12), memcmp(str1, str2, 12));
+#test s21_memcmp_test_7_str
+    char *str1 = "";
+    char *str2 = "Hello World";
+    ck_assert_int_eq(s21_memcmp(str1, str2, 0), memcmp(str1, str2, 0));
+// start memmove tests
+#test s21_memmove_test_1_str
+    char *str1 = "";
+    char *ptr1 = (char*)malloc(sizeof(char) * 5);
+    char *ptr2 = (char*)malloc(sizeof(char) * 5);
+    ck_assert_str_eq(s21_memmove(ptr1, str1, 5), memmove(ptr2, str1, 5));
+    free(ptr1);
+    free(ptr2);
+#test s21_memmove_test_2_str
+    char ptr1[6] = "1";
+    char ptr2[6] = "1";
+    char str1[6] = "Hello";
+    ck_assert_str_eq(s21_memmove(ptr1, str1, 5), memmove(ptr2, str1, 5));
+#test s21_memmove_test_3_str
+    char str1[6] = "Hello";
+    char ptr1[6] = "1";
+    char ptr2[6] = "1";
+    ck_assert_str_eq(s21_memmove(ptr1, str1, 5), memmove(ptr2, str1, 5));
+// start strcat tests
+#test s21_strcat_test_1_str
+    char str1[14] = "Hello ";
+    char str2[14] = "Hello ";
+    char str3[6] = "World";
+    ck_assert_str_eq(s21_strcat(str1, str3), strcat(str2, str3));
+#test s21_strcat_test_2_str
+    char str1[14] = "";
+    char str2[14] = "";
+    char str3[6] = "World";
+    ck_assert_str_eq(s21_strcat(str1, str3), strcat(str2, str3));
+#test s21_strcat_test_3_str
+    char str1[14] = "Hello ";
+    char str2[14] = "Hello ";
+    char str3[6] = "";
+    ck_assert_str_eq(s21_strcat(str1, str3), strcat(str2, str3));
+#test s21_strcat_test_4_str
+    char str1[14] = "";
+    char str2[14] = "";
+    char str3[6] = "";
+    ck_assert_str_eq(s21_strcat(str1, str3), strcat(str2, str3));
+// ekala
+// start strncmp tests
+#test s21_strncmp_test_1
+    int n = 5;
+    char str1[16] = "1234567890";
+    char str2[16] = "1234567890";
+    ck_assert_int_eq(s21_strncmp(str1, str2, n), strncmp(str1, str2, n));
+#test s21_strncmp_test_2
+    int n = 5;
+    char str1[16] = "1234567890";
+    char str2[16] = "0234567890";
+    ck_assert_int_eq(s21_strncmp(str1, str2, n), strncmp(str1, str2, n));
+#test s21_strncmp_test_3
+    int n = 5;
+    char str1[16] = "0234567890";
+    char str2[16] = "1234567890";
+    ck_assert_int_eq(s21_strncmp(str1, str2, n), strncmp(str1, str2, n));
+#test s21_strncmp_test_4
+    int n = 5;
+    char str1[16] = "";
+    char str2[16] = "";
+    ck_assert_int_eq(s21_strncmp(str1, str2, n), strncmp(str1, str2, n));
+#test s21_strncmp_test_5
+    int n = 5;
+    char str1[16] = "1234567890";
+    char str2[16] = "";
+    ck_assert_int_eq(s21_strncmp(str1, str2, n), strncmp(str1, str2, n));
+#test s21_strncmp_test_6
+    int n = 5;
+    char str1[16] = "";
+    char str2[16] = "1234567890";
+    ck_assert_int_eq(s21_strncmp(str1, str2, n), strncmp(str1, str2, n));
+#test s21_strncmp_test_7
+    int n = 0;
+    char str1[16] = "1234567890";
+    char str2[16] = "1234567890";
+    ck_assert_int_eq(s21_strncmp(str1, str2, n), strncmp(str1, str2, n));
+#test s21_strncmp_test_8
+    int n = 5;
+    char *str1 = "1234567890";
+    char *str2 = "1234567890";
+    ck_assert_int_eq(s21_strncmp(str1, str2, n), strncmp(str1, str2, n));
+#test s21_strncmp_test_9
+    int n = 5;
+    char *str1 = "0234567890";
+    char *str2 = "1234567890";
+    ck_assert_int_eq(s21_strncmp(str1, str2, n), strncmp(str1, str2, n));
+#test s21_strncmp_test_10
+    int n = 5;
+    char *str1 = "1234567890";
+    char *str2 = "0234567890";
+    ck_assert_int_eq(s21_strncmp(str1, str2, n), strncmp(str1, str2, n));
+#test s21_strncmp_test_11
+    int n = 5;
+    char *str1 = "";
+    char *str2 = "";
+    ck_assert_int_eq(s21_strncmp(str1, str2, n), strncmp(str1, str2, n));
+#test s21_strncmp_test_12
+    int n = 5;
+    char *str1 = "1234567890";
+    char *str2 = "";
+    ck_assert_int_eq(s21_strncmp(str1, str2, n), strncmp(str1, str2, n));
+#test s21_strncmp_test_13
+    int n = 5;
+    char *str1 = "";
+    char *str2 = "0234567890";
+    ck_assert_int_eq(s21_strncmp(str1, str2, n), strncmp(str1, str2, n));
+#test s21_strncmp_test_14
+    int n = 0;
+    char *str1 = "1234567890";
+    char *str2 = "1234567890";
+    ck_assert_int_eq(s21_strncmp(str1, str2, n), strncmp(str1, str2, n));
+// start strcspn tests
+#test s21_strcspn_test_1
+    char str[16] = "Hello";
+    char sem[16] = "l";
+    ck_assert_int_eq(s21_strcspn(str, sem), strcspn(str, sem));
+#test s21_strcspn_test_2
+    char str[16] = "Hello";
+    char sem[16] = "";
+    ck_assert_int_eq(s21_strcspn(str, sem), strcspn(str, sem));
+#test s21_strcspn_test_3
+    char str[16] = "";
+    char sem[16] = "";
+    ck_assert_int_eq(s21_strcspn(str, sem), strcspn(str, sem));
+#test s21_strcspn_test_4
+    char str[16] = "";
+    char sem[16] = "l";
+    ck_assert_int_eq(s21_strcspn(str, sem), strcspn(str, sem));
+#test s21_strcspn_test_5
+    char *str = "Hello";
+    char *sem = "l";
+    ck_assert_int_eq(s21_strcspn(str, sem), strcspn(str, sem));
+#test s21_strcspn_test_6
+    char *str = "Hello";
+    char *sem = "";
+    ck_assert_int_eq(s21_strcspn(str, sem), strcspn(str, sem));
+#test s21_strcspn_test_7
+    char *str = "";
+    char *sem = "";
+    ck_assert_int_eq(s21_strcspn(str, sem), strcspn(str, sem));
+#test s21_strcspn_test_8
+    char *str = "";
+    char *sem = "l";
+    ck_assert_int_eq(s21_strcspn(str, sem), strcspn(str, sem));
+// start strrchr tests
+#test s21_strrchr_test_1
+    char str[15] = "Hello World";
+    char *ptr1 = s21_strrchr(str, 'o');
+    char *ptr2 = strrchr(str, 'o');
+    ck_assert_int_eq(*ptr1, *ptr2);
+    fail_unless(ptr1 == ptr2);
+#test s21_strrchr_test_2
+    char str[15] = "";
+    char *ptr1 = s21_strrchr(str, 'o');
+    char *ptr2 = strrchr(str, 'o');
+    fail_unless(ptr1 == ptr2);
+#test s21_strrchr_test_3
+    char str[15] = "Hello World0";
+    char *ptr1 = s21_strrchr(str, 'o');
+    char *ptr2 = strrchr(str, 'o');
+    ck_assert_int_eq(*ptr1, *ptr2);
+    fail_unless(ptr1 == ptr2);
+#test s21_strrchr_test_4
+    char str[15] = "Hello World";
+    char *ptr1 = s21_strrchr(str, '4');
+    char *ptr2 = strrchr(str, '4');
+    fail_unless(ptr1 == ptr2);
+#test s21_strrchr_test_5
+    char *str = "Hello World";
+    char *ptr1 = s21_strrchr(str, 'o');
+    char *ptr2 = strrchr(str, 'o');
+    ck_assert_int_eq(*ptr1, *ptr2);
+    fail_unless(ptr1 == ptr2);
+#test s21_strrchr_test_6
+    char *str = "";
+    char *ptr1 = s21_strrchr(str, 'o');
+    char *ptr2 = strrchr(str, 'o');
+    fail_unless(ptr1 == ptr2);
+#test s21_strrchr_test_7
+    char *str = "Hello World0";
+    char *ptr1 = s21_strrchr(str, 'o');
+    char *ptr2 = strrchr(str, 'o');
+    ck_assert_int_eq(*ptr1, *ptr2);
+    fail_unless(ptr1 == ptr2);
+// start strncpy tests
+#test s21_strncpy_test_1
+    int n = 5;
+    char dest1[16] = "Hello";
+    char dest2[16] = "Hello";
+    char src[16] = "World";
+    ck_assert_str_eq(s21_strncpy(dest1, src, n), strncpy(dest2, src, n));
+ #test s21_strncpy_test_2
+    int n = 5;
+    char dest1[16] = "Hell";
+    char dest2[16] = "Hell";
+    char src[16] = "World";
+    ck_assert_str_eq(s21_strncpy(dest1, src, n), strncpy(dest2, src, n));
+#test s21_strncpy_test_3
+    int n = 5;
+    char dest1[16] = "Hello";
+    char dest2[16] = "Hello";
+    char src[16] = "Wok";
+    ck_assert_str_eq(s21_strncpy(dest1, src, n), strncpy(dest2, src, n));
+#test s21_strncpy_test_4
+    int n = 0;
+    char dest1[16] = "Hello";
+    char dest2[16] = "Hello";
+    char src[16] = "World";
+    ck_assert_str_eq(s21_strncpy(dest1, src, n), strncpy(dest2, src, n));
+#test s21_strncpy_test_5
+    int n = 5;
+    char dest1[16] = "Hello";
+    char dest2[16] = "Hello";
+    char src[16] = "";
+    ck_assert_str_eq(s21_strncpy(dest1, src, n), strncpy(dest2, src, n));
+#test s21_strncpy_test_6
+    int n = 5;
+    char dest1[16] = "";
+    char dest2[16] = "";
+    char src[16] = "";
+    ck_assert_str_eq(s21_strncpy(dest1, src, n), strncpy(dest2, src, n));
+#test s21_strncpy_test_7
+    int n = 0;
+    char dest1[16] = "";
+    char dest2[16] = "";
+    char src[16] = "";
+    ck_assert_str_eq(s21_strncpy(dest1, src, n), strncpy(dest2, src, n));
+// mabobbi
+// start memcpy tests
+#test s21_memcpy_test_1
+    int n = 5;
+    char dest1[16] = "Hello";
+    char dest2[16] = "Hello";
+    char src[16] = "World";
+    ck_assert_str_eq(s21_memcpy(dest1, src, n), memcpy(dest2, src, n));
+#test s21_memcpy_test_2
+    int n = 5;
+    char dest1[16] = "Hell";
+    char dest2[16] = "Hell";
+    char src[16] = "World";
+    ck_assert_str_eq(s21_memcpy(dest1, src, n), memcpy(dest2, src, n));
+#test s21_memcpy_test_3
+    int n = 5;
+    char dest1[16] = "Hello";
+    char dest2[16] = "Hello";
+    char src[16] = "Wok";
+    ck_assert_str_eq(s21_memcpy(dest1, src, n), memcpy(dest2, src, n));
+#test s21_memcpy_test_4
+    int n = 0;
+    char dest1[16] = "Hello";
+    char dest2[16] = "Hello";
+    char src[16] = "World";
+    ck_assert_str_eq(s21_memcpy(dest1, src, n), memcpy(dest2, src, n));
+#test s21_memcpy_test_5
+    int n = 5;
+    char dest1[16] = "Hello";
+    char dest2[16] = "Hello";
+    char src[16] = "";
+    ck_assert_str_eq(s21_memcpy(dest1, src, n), memcpy(dest2, src, n));
+#test s21_memcpy_test_6
+    int n = 5;
+    char dest1[16] = "";
+    char dest2[16] = "";
+    char src[16] = "";
+    ck_assert_str_eq(s21_memcpy(dest1, src, n), memcpy(dest2, src, n));
+#test s21_memcpy_test_7
+    int n = 0;
+    char dest1[16] = "";
+    char dest2[16] = "";
+    char src[16] = "";
+    ck_assert_str_eq(s21_memcpy(dest1, src, n), memcpy(dest2, src, n));
+// start strlen tests
+#test s21_strlen_test_1
+    char a[] = "HelloWorld";
+    ck_assert_int_eq(s21_strlen(a), strlen(a));
+#test s21_strlen_test_2
+    char b[30];
+    ck_assert_int_eq(s21_strlen(b), strlen(b));
+#test s21_strlen_test_3
+    char str[5] = "Hello";
+    ck_assert_int_eq(s21_strlen(str), strlen(str));
+#test s21_strlen_test_4
+     char *p = "Gul'dan";
+     ck_assert_int_eq(s21_strlen(p), strlen(p));
+// start strpbrk tests
+#test s21_strpbrk_test_1
+    char *m = " Moz art's ";
+    char *f_m = " ";
+    ck_assert_str_eq(s21_strpbrk(m, f_m), strpbrk(m, f_m));
+#test s21_strpbrk_test_2
+    char m[] = "Hello";
+    char f_m[] = "";
+    fail_unless(s21_strpbrk(m, f_m) == strpbrk(m, f_m));
+ #test s21_strpbrk_test_3
+    char str[10] = "\\Hello";
+    char str1[10] = " le\\H";
+    ck_assert_str_eq(s21_strpbrk(str, str1), strpbrk(str, str1));
+    fail_unless(s21_strpbrk(str, str1) == strpbrk(str, str1));
+#test s21_strpbrk_test_4
+    char *str = "HelloWorld";
+    char str1[] = "W";
+    ck_assert_str_eq(s21_strpbrk(str, str1), strpbrk(str, str1));
+    fail_unless(s21_strpbrk(str, str1) == strpbrk(str, str1));
+#test s21_strpbrk_test_5
+    char str[] = "PrivetMir";
+    ck_assert_str_eq(s21_strpbrk(str, "e"), strpbrk(str, "e"));
+#test s21_strpbrk_test_6
+    char str[] = "";
+    char str1[] = "2";
+    fail_unless(s21_strpbrk(str, str1) == strpbrk(str, str1));
+// bonus
+// start toupper tests
+#test s21_toupper_test_1
+    char* str = "hello";
+    char* ptr = (char*)s21_to_upper(str);
+    ck_assert_str_eq(ptr, "HELLO");
+    free(ptr);
+#test s21_toupper_test_2
+    char* str = "";
+    char* ptr = (char*)s21_to_upper(str);
+    ck_assert_str_eq(ptr, "");
+    free(ptr);
+#test s21_toupper_test_3
+    char* str = "HeLLo";
+    char* ptr = (char*)s21_to_upper(str);
+    ck_assert_str_eq(ptr, "HELLO");
+    free(ptr);
+#test s21_toupper_test_4
+    char* str = "HELLO";
+    char* ptr = (char*)s21_to_upper(str);
+    ck_assert_str_eq(ptr, "HELLO");
+    free(ptr);
+#test s21_toupper_test_5
+    char* str = "!@#$%^&";
+    char* ptr = (char*)s21_to_upper(str);
+    ck_assert_str_eq(ptr, "!@#$%^&");
+    free(ptr);
+// start tolower tests
+#test s21_tolower_test_1
+    char* str = "HELLO";
+    char* ptr = (char*)s21_to_lower(str);
+    ck_assert_str_eq(ptr, "hello");
+    free(ptr);
+#test s21_tolower_test_2
+    char* str = "";
+    char* ptr = (char*)s21_to_lower(str);
+    ck_assert_str_eq(ptr, "");
+    free(ptr);
+#test s21_tolower_test_3
+    char* str = "HeLLo";
+    char* ptr = (char*)s21_to_lower(str);
+    ck_assert_str_eq(ptr, "hello");
+    free(ptr);
+#test s21_tolower_test_4
+    char* str = "hello";
+    char* ptr = (char*)s21_to_lower(str);
+    ck_assert_str_eq(ptr, "hello");
+    free(ptr);
+#test s21_tolower_test_5
+    char* str = "!@#$%^&";
+    char* ptr = (char*)s21_to_lower(str);
+    ck_assert_str_eq(ptr, "!@#$%^&");
+    free(ptr);
+// start insert tests
+#test s21_insert_test_1
+    char* str1 = "Helrld";
+    char* str2 = "lo Wo";
+    char* result = (char*)s21_insert(str1, str2, 3);
+    ck_assert_str_eq(result, "Hello World");
+    free(result);
+#test s21_insert_test_2
+    char* str1 = "Hello";
+    char* str2 = " World";
+    char* result = (char*)s21_insert(str1, str2, 5);
+    ck_assert_str_eq(result, "Hello World");
+    free(result);
+#test s21_insert_test_3
+    char* str1 = "";
+    char* str2 = "Hello World";
+    char* result = (char*)s21_insert(str1, str2, 0);
+    ck_assert_str_eq(result, "Hello World");
+    free(result);
+#test s21_trim_test_1
+    char *str = "  123abc456xyz789  ";
+    char *ptr = S21_NULL;
+    char *result = (char*)s21_trim(str, ptr);
+    ck_assert_str_eq(result, "123abc456xyz789");
+    free(result);
+#test s21_trim_test_2
+    char *str = "123abc456xyz789";
+    char *ptr = "123456789";
+    char *result = (char*)s21_trim(str, ptr);
+    ck_assert_str_eq(result, "abc456xyz");
+    free(result);
+#test s21_trim_test_3
+    char *str = "";
+    char *ptr = "123456789";
+    char *result = (char*)s21_trim(str, ptr);
+    ck_assert_str_eq(result, "");
+    free(result);
+#test s21_sprintf_test_1_c
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "Hello %c", 'a'), sprintf(str2, "Hello %c", 'a'));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_2_c
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%c", 'a'), sprintf(str2, "%c", 'a'));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_3_c
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%-5c", 'a'), sprintf(str2, "%-5c", 'a'));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_4_c
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%5c", 'a'), sprintf(str2, "%5c", 'a'));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_5_c
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%c", 99), sprintf(str2, "%c", 99));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_1_d
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "Hello %d", 5), sprintf(str2, "Hello %d", 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_2_d
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%d", 5), sprintf(str2, "%d", 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_3_d
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%d", -5), sprintf(str2, "%d", -5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_4_d
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%+d", 5), sprintf(str2, "%+d", 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_5_d
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%-3d", 5), sprintf(str2, "%-3d", 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_6_d
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%3d", 5), sprintf(str2, "%3d", 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_7_d
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%*d", 3, 5), sprintf(str2, "%*d", 3, 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_8_d
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "% d", -5), sprintf(str2, "% d", -5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_9_d
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "% d", 5), sprintf(str2, "% d", 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_10_d
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%03d", 5), sprintf(str2, "%03d", 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_11_d
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.3d", 5), sprintf(str2, "%.3d", 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_12_d
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.0d", 0), sprintf(str2, "%.0d", 0));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_13_d
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.*d", 3, 5), sprintf(str2, "%.*d", 3, 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_14_d
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.0d", 0), sprintf(str2, "%.0d", 0));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_15_d
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    short int ptr = 2;
+    ck_assert_int_eq(s21_sprintf(str1, "%hd", ptr), sprintf(str2, "%hd", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_16_d
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    long int ptr = 3000000000;
+    ck_assert_int_eq(s21_sprintf(str1, "%ld", ptr), sprintf(str2, "%ld", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_1_i
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "Hello %i", 5), sprintf(str2, "Hello %i", 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_2_i
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%i", 5), sprintf(str2, "%i", 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_3_i
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%i", -5), sprintf(str2, "%i", -5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_4_i
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%+i", 5), sprintf(str2, "%+i", 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_5_i
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%-3i", 5), sprintf(str2, "%-3i", 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_6_i
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%3i", 5), sprintf(str2, "%3i", 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_7_i
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%*i", 3, 5), sprintf(str2, "%*i", 3, 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_8_i
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "% i", -5), sprintf(str2, "% i", -5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_9_i
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "% i", 5), sprintf(str2, "% i", 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_10_i
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%03i", 5), sprintf(str2, "%03i", 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_11_i
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.3i", 5), sprintf(str2, "%.3i", 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_12_i
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.0i", 0), sprintf(str2, "%.0i", 0));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_13_i
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.*i", 3, 5), sprintf(str2, "%.*i", 3, 5));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_14_i
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.0i", 0), sprintf(str2, "%.0i", 0));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_15_i
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    short int ptr = 2;
+    ck_assert_int_eq(s21_sprintf(str1, "%hi", ptr), sprintf(str2, "%hi", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_16_i
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    long int ptr = 3000000000;
+    ck_assert_int_eq(s21_sprintf(str1, "%li", ptr), sprintf(str2, "%li", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_1_e
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "Hello %e", 0.001), sprintf(str2, "Hello %e", 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_2_e
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%e", 0.001), sprintf(str2, "%e", 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_3_e
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%-15e", 0.001), sprintf(str2, "%-15e", 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_4_e
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%15e", 0.001), sprintf(str2, "%15e", 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_5_e
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%+e", 0.001), sprintf(str2, "%+e", 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_6_e
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "% e", 0.001), sprintf(str2, "% e", 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_7_e
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%015e", 0.001), sprintf(str2, "%015e", 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_8_e
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%*e", 15, 0.001), sprintf(str2, "%*e", 15, 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_9_e
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.2e", 0.001), sprintf(str2, "%.2e", 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_10_e
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.*e", 2, 0.001), sprintf(str2, "%.*e", 2, 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_11_e
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    long double ptr = 0.0000000000001;
+    ck_assert_int_eq(s21_sprintf(str1, "%Le", ptr), sprintf(str2, "%Le", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_1_E
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "Hello %E", 0.001), sprintf(str2, "Hello %E", 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_2_E
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%E", 0.001), sprintf(str2, "%E", 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_3_E
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%-15E", 0.001), sprintf(str2, "%-15E", 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_4_E
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%15E", 0.001), sprintf(str2, "%15E", 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_5_E
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%+E", 0.001), sprintf(str2, "%+E", 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_6_E
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "% E", 0.001), sprintf(str2, "% E", 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_7_E
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%015E", 0.001), sprintf(str2, "%015E", 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_8_E
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%*E", 15, 0.001), sprintf(str2, "%*E", 15, 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_9_E
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.2E", 0.001), sprintf(str2, "%.2E", 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_10_E
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.*E", 2, 0.001), sprintf(str2, "%.*E", 2, 0.001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_11_E
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    long double ptr = 0.0000000000001;
+    ck_assert_int_eq(s21_sprintf(str1, "%LE", ptr), sprintf(str2, "%LE", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_1_f
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "Hello %f", 123.123), sprintf(str2, "Hello %f", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_2_f
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%f", 123.123), sprintf(str2, "%f", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_3_f
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%-11f", 123.123), sprintf(str2, "%-11f", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_4_f
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%11f", 123.123), sprintf(str2, "%11f", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_5_f
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%+f", 123.123), sprintf(str2, "%+f", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_6_f
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "% f", 123.123), sprintf(str2, "% f", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_7_f
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%#f", 123.), sprintf(str2, "%#f", 123.));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_8_f
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%011f", 123.123), sprintf(str2, "%011f", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_9_f
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%0*f", 11, 123.123), sprintf(str2, "%0*f", 11, 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_10_f
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%*f", 10, 123.123), sprintf(str2, "%*f", 10, 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_11_f
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.4f", 123.123), sprintf(str2, "%.4f", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_12_f
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.*f", 4, 123.123), sprintf(str2, "%.*f", 4, 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_13_f
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    long double ptr = 123.123;
+    ck_assert_int_eq(s21_sprintf(str1, "%Lf", ptr), sprintf(str2, "%Lf", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_14_f
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    double ptr = 123.123;
+    ck_assert_int_eq(s21_sprintf(str1, "%#.0f", ptr), sprintf(str2, "%#.0f", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_1_g
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "Hello %g", 123.123), sprintf(str2, "Hello %g", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_2_g
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%g", 123.123), sprintf(str2, "%g", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_3_g
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%-11g", 123.123), sprintf(str2, "%-11g", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_4_g
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%11g", 123.123), sprintf(str2, "%11g", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_5_g
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%+g", 123.123), sprintf(str2, "%+g", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_6_g
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "% g", 123.123), sprintf(str2, "% g", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_7_g
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%#g", 123.), sprintf(str2, "%#g", 123.));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_8_g
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%011g", 123.123), sprintf(str2, "%011g", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_9_g
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%0*g", 11, 123.123), sprintf(str2, "%0*g", 11, 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_10_g
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%*g", 10, 123.123), sprintf(str2, "%*g", 10, 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_11_g
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.4g", 123.123), sprintf(str2, "%.4g", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_12_g
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.*g", 4, 123.123), sprintf(str2, "%.*g", 4, 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_13_g
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    long double ptr = 123.123;
+    ck_assert_int_eq(s21_sprintf(str1, "%Lg", ptr), sprintf(str2, "%Lg", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_14_g
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.4g", -123.123), sprintf(str2, "%.4g", -123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_15_g
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.4g", 123123123.123), sprintf(str2, "%.4g", 123123123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_16_g
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.4g", 0.00000000000001), sprintf(str2, "%.4g", 0.00000000000001));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_17_g
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.10g", 123.10000), sprintf(str2, "%.10g", 123.10000));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_1_G
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "Hello %G", 123.123), sprintf(str2, "Hello %G", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_2_G
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%G", 123.123), sprintf(str2, "%G", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_3_G
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%-11G", 123.123), sprintf(str2, "%-11G", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_4_G
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%11G", 123.123), sprintf(str2, "%11G", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_5_G
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%+G", 123.123), sprintf(str2, "%+G", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_6_G
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "% G", 123.123), sprintf(str2, "% G", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_7_G
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%#G", 123.), sprintf(str2, "%#G", 123.));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_8_G
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%011G", 123.123), sprintf(str2, "%011G", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_9_G
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%0*G", 11, 123.123), sprintf(str2, "%0*G", 11, 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_10_G
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%*G", 10, 123.123), sprintf(str2, "%*G", 10, 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_11_G
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.4G", 123.123), sprintf(str2, "%.4G", 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_12_G
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.*G", 4, 123.123), sprintf(str2, "%.*G", 4, 123.123));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_13_G
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    long double ptr = 123.123;
+    ck_assert_int_eq(s21_sprintf(str1, "%LG", ptr), sprintf(str2, "%LG", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_14_G
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    double ptr = 123123123.123;
+    ck_assert_int_eq(s21_sprintf(str1, "%G", ptr), sprintf(str2, "%G", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_1_o
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "Hello %o", 10), sprintf(str2, "Hello %o", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_2_o
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%o", 10), sprintf(str2, "%o", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_3_o
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%-5oHello", 10), sprintf(str2, "%-5oHello", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_4_o
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%5o", 10), sprintf(str2, "%5o", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_5_o
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%#o", 10), sprintf(str2, "%#o", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_6_o
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%05o", 10), sprintf(str2, "%05o", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_7_o
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%0*o", 5, 10), sprintf(str2, "%0*o", 5, 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_8_o
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%*o", 5, 10), sprintf(str2, "%*o", 5, 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_9_o
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.4o", 10), sprintf(str2, "%.4o", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_10_o
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.*o", 4, 10), sprintf(str2, "%.*o", 4, 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_11_o
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.*o", 0, 0), sprintf(str2, "%.*o", 0, 0));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_12_o
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%#.0o", 0), sprintf(str2, "%#.0o", 0));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_13_o
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.0o", 0), sprintf(str2, "%.0o", 0));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_1_s
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "Hello %s", "World!"), sprintf(str2, "Hello %s", "World!"));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_2_s
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "Hello %.5s", "World!"), sprintf(str2, "Hello %.5s", "World!"));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_3_s
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "Hello %.*s", 5, "World!"), sprintf(str2, "Hello %.*s", 5, "World!"));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_1_u
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    unsigned int ptr = 5;
+    ck_assert_int_eq(s21_sprintf(str1, "Hello %u", ptr), sprintf(str2, "Hello %u", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_2_u
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    unsigned int ptr = 5;
+    ck_assert_int_eq(s21_sprintf(str1, "%u", ptr), sprintf(str2, "%u", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_3_u
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    unsigned int ptr = 5;
+    ck_assert_int_eq(s21_sprintf(str1, "%-3u", ptr), sprintf(str2, "%-3u", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_4_u
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    unsigned int ptr = 5;
+    ck_assert_int_eq(s21_sprintf(str1, "%3u", ptr), sprintf(str2, "%3u", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_5_u
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    unsigned int ptr = 5;
+    ck_assert_int_eq(s21_sprintf(str1, "%*u", 3, ptr), sprintf(str2, "%*u", 3, ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_6_u
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    unsigned int ptr = 5;
+    ck_assert_int_eq(s21_sprintf(str1, "%03u", ptr), sprintf(str2, "%03u", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_7_u
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    unsigned int ptr = 5;
+    ck_assert_int_eq(s21_sprintf(str1, "%.3u", ptr), sprintf(str2, "%.3u", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_8_u
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    unsigned int ptr = 0;
+    ck_assert_int_eq(s21_sprintf(str1, "%.0u", ptr), sprintf(str2, "%.0u", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_9_u
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    unsigned int ptr = 5;
+    ck_assert_int_eq(s21_sprintf(str1, "%.*u", 3, ptr), sprintf(str2, "%.*u", 3, ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_10_u
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    unsigned int ptr = 0;
+    ck_assert_int_eq(s21_sprintf(str1, "%.0u", ptr), sprintf(str2, "%.0u", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_11_u
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    unsigned short int ptr = 2;
+    ck_assert_int_eq(s21_sprintf(str1, "%hu", ptr), sprintf(str2, "%hu", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_12_u
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    unsigned long int ptr = 3000000000;
+    ck_assert_int_eq(s21_sprintf(str1, "%lu", ptr), sprintf(str2, "%lu", ptr));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_1_x
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "Hello %x", 10), sprintf(str2, "Hello %x", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_2_x
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%x", 10), sprintf(str2, "%x", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_3_x
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%-5xHello", 10), sprintf(str2, "%-5xHello", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_4_x
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%5x", 10), sprintf(str2, "%5x", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_5_x
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%#x", 10), sprintf(str2, "%#x", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_6_x
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%05x", 10), sprintf(str2, "%05x", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_7_x
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%0*x", 5, 10), sprintf(str2, "%0*x", 5, 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_8_x
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%*x", 5, 10), sprintf(str2, "%*x", 5, 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_9_x
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.4x", 10), sprintf(str2, "%.4x", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_10_x
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.*x", 4, 10), sprintf(str2, "%.*x", 4, 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_11_x
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.*x", 0, 0), sprintf(str2, "%.*x", 0, 0));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_12_x
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%#.0x", 0), sprintf(str2, "%#.0x", 0));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_13_x
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.0x", 0), sprintf(str2, "%.0x", 0));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_1_X
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "Hello %X", 10), sprintf(str2, "Hello %X", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_2_X
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%X", 10), sprintf(str2, "%X", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_3_X
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%-5XHello", 10), sprintf(str2, "%-5XHello", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_4_X
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%5X", 10), sprintf(str2, "%5X", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_5_X
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%#X", 10), sprintf(str2, "%#X", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_6_X
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%05X", 10), sprintf(str2, "%05X", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_7_X
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%0*X", 5, 10), sprintf(str2, "%0*X", 5, 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_8_X
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%*X", 5, 10), sprintf(str2, "%*X", 5, 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_9_X
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.4X", 10), sprintf(str2, "%.4X", 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_10_X
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.*X", 4, 10), sprintf(str2, "%.*X", 4, 10));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_11_X
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.*X", 0, 0), sprintf(str2, "%.*X", 0, 0));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_12_X
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%#.0X", 0), sprintf(str2, "%#.0X", 0));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_13_X
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%.0X", 0), sprintf(str2, "%.0X", 0));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_1_p
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%p", str1), sprintf(str2, "%p", str1));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_2_p
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%5p", str1), sprintf(str2, "%5p", str1));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_1_n
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    int x = 0;
+    int *cnt = &x;
+    char *ptr = "Hello %n Hello";
+    ck_assert_int_eq(s21_sprintf(str1, ptr, cnt), sprintf(str2, ptr, cnt));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
+#test s21_sprintf_test_1
+    char *str1 = (char*)malloc(sizeof(char) * 1024);
+    char *str2 = (char*)malloc(sizeof(char) * 1024);
+    ck_assert_int_eq(s21_sprintf(str1, "%%"), sprintf(str2, "%%"));
+    ck_assert_str_eq(str1, str2);
+    free(str1);
+    free(str2);
