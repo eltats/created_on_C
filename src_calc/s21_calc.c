@@ -18,8 +18,6 @@ int s21_check_oper(char simbol) {
         result = EASY_CHAR;
     } else if (simbol == '+' || simbol == '-') {
         result = LOW_CHAR;
-    } else if (simbol == '(') {
-        result = VERY_LOW_CHAR;
     } else {
         result = -2;
     }
@@ -28,44 +26,44 @@ int s21_check_oper(char simbol) {
 
 void s21_check_func(st_c **stack_oper, char *output_str) {
     if ((*stack_oper)->simbol == 'c') {
-        strcat(output_str, "cos");
-        strcat(output_str, " ");
+        strncat(output_str, "cos", 3);
+        strncat(output_str, " ", 1);
         s21_pop_char(stack_oper);
     } else if ((*stack_oper)->simbol == 's') {
-        strcat(output_str, "sin");
-        strcat(output_str, " ");
+        strncat(output_str, "sin", 3);
+        strncat(output_str, " ", 1);
         s21_pop_char(stack_oper);
     } else if ((*stack_oper)->simbol == 't') {
-        strcat(output_str, "tan");
-        strcat(output_str, " ");
+        strncat(output_str, "tan", 3);
+        strncat(output_str, " ", 1);
         s21_pop_char(stack_oper);
     } else if ((*stack_oper)->simbol == 'C') {
-        strcat(output_str, "acos");
-        strcat(output_str, " ");
+        strncat(output_str, "acos", 4);
+        strncat(output_str, " ", 1);
         s21_pop_char(stack_oper);
     } else if ((*stack_oper)->simbol == 'S') {
-        strcat(output_str, "asin");
-        strcat(output_str, " ");
+        strncat(output_str, "asin", 4);
+        strncat(output_str, " ", 1);
         s21_pop_char(stack_oper);
     } else if ((*stack_oper)->simbol == 'T') {
-        strcat(output_str, "atan");
-        strcat(output_str, " ");
+        strncat(output_str, "atan", 4);
+        strncat(output_str, " ", 1);
         s21_pop_char(stack_oper);
     } else if ((*stack_oper)->simbol == 'q') {
-        strcat(output_str, "sqrt");
-        strcat(output_str, " ");
+        strncat(output_str, "sqrt", 4);
+        strncat(output_str, " ", 1);
         s21_pop_char(stack_oper);
     } else if ((*stack_oper)->simbol == 'l') {
-        strcat(output_str, "ln");
-        strcat(output_str, " ");
+        strncat(output_str, "ln", 2);
+        strncat(output_str, " ", 1);
         s21_pop_char(stack_oper);
     } else if ((*stack_oper)->simbol == 'L') {
-        strcat(output_str, "log");
-        strcat(output_str, " ");
+        strncat(output_str, "log", 3);
+        strncat(output_str, " ", 1);
         s21_pop_char(stack_oper);
     } else {
-        strcat(output_str, &(*stack_oper)->simbol);
-        strcat(output_str, " ");
+        strncat(output_str, &(*stack_oper)->simbol, 1);
+        strncat(output_str, " ", 1);
         s21_pop_char(stack_oper);
     }
 }
@@ -81,7 +79,6 @@ void s21_check_func_cmp(st_c **stack_oper, char *output_str) {
         *stack_oper = s21_push_char(*stack_oper, 't');
         free(output_str);
     } else if (strcmp(output_str, "acos") == 0) {
-        printf("ATAN!\n");
         *stack_oper = s21_push_char(*stack_oper, 'C');
         free(output_str);
     } else if (strcmp(output_str, "asin") == 0) {
@@ -140,12 +137,12 @@ void s21_arithmetic_operations(st_d **stack_oper, char simbol) {
         if (b != 0) {
             *stack_oper = s21_push_double(*stack_oper, a / b);
         } else {
-            printf("NONONONO! DIV 0\n");
+            *stack_oper = s21_push_double(*stack_oper, NAN);
         }
     } else if (simbol == '^') {
         double b = s21_pop_double(stack_oper);
         double a = s21_pop_double(stack_oper);
-        *stack_oper = s21_push_double(*stack_oper, powl(a, b));
+        *stack_oper = s21_push_double(*stack_oper, pow(a, b));
     } else if (simbol == '%') {
         double b = s21_pop_double(stack_oper);
         double a = s21_pop_double(stack_oper);

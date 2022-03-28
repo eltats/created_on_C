@@ -7,7 +7,6 @@ typedef struct stack_char {
 } st_c;
 
 st_c *s21_push_char(st_c *ptr, char ham);
-void s21_print_stuct_char(st_c *stack);
 char s21_pop_char(st_c **stack);
 
 // stack double
@@ -17,7 +16,5 @@ typedef struct stack_double {
 } st_d;
 
 st_d *s21_push_double(st_d *ptr, double ham);
-void s21_print_stuct_double(st_d *stack);
 double s21_pop_double(st_d **stack);
-
 #endif  // SRC_S21_STACK_H_
